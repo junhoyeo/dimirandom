@@ -1,60 +1,58 @@
-<template>
-  <div id="app">
-    <img src="./assets/logo.png">
-    <h1>{{ msg }}</h1>
-    <h2>Essential Links</h2>
-    <ul>
-      <li><a href="https://vuejs.org" target="_blank">Core Docs</a></li>
-      <li><a href="https://forum.vuejs.org" target="_blank">Forum</a></li>
-      <li><a href="https://chat.vuejs.org" target="_blank">Community Chat</a></li>
-      <li><a href="https://twitter.com/vuejs" target="_blank">Twitter</a></li>
-    </ul>
-    <h2>Ecosystem</h2>
-    <ul>
-      <li><a href="http://router.vuejs.org/" target="_blank">vue-router</a></li>
-      <li><a href="http://vuex.vuejs.org/" target="_blank">vuex</a></li>
-      <li><a href="http://vue-loader.vuejs.org/" target="_blank">vue-loader</a></li>
-      <li><a href="https://github.com/vuejs/awesome-vue" target="_blank">awesome-vue</a></li>
-    </ul>
-  </div>
-</template>
-
 <script>
 export default {
   name: 'app',
+  created () {
+    this.initWeights()
+  },
   data () {
     return {
-      msg: 'Welcome to Your Vue.js App'
+      random: 1,
+      weights: [],
+      variationWeight: 0.2,
+      studentNumber: 35,
+    }
+  },
+  methods: {
+    initWeights () {
+      this.weights = Array(this.studentNumber).fill(1)
+    },
+    updateRandom () {
+      let selected = this.weightedRandom(this.weights)
+      this.weights[selected] += this.variationWeight
+      this.weights[selected] = Number(this.weights[selected].toFixed(1))
+      this.random = selected + 1
     }
   }
 }
 </script>
 
-<style>
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+<template>
+  <div id="app">
+    <div
+      class="random"
+      @click="updateRandom"
+    >
+      <span>{{ random }}</span>
+    </div>
+    <pre>
+      {{ weights }}
+    </pre>
+  </div>
+</template>
+
+<style lang="scss" scoped>
+.random {
+  font-size: 3em;
+  user-select: none;
+  cursor: pointer;
+  width: 1.5em;
+  background-color: rgb(240, 240, 240);
+  color: black;
   text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
 
-h1, h2 {
-  font-weight: normal;
-}
-
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-
-li {
-  display: inline-block;
-  margin: 0 10px;
-}
-
-a {
-  color: #42b983;
+  span {
+    display: inline-block;
+    vertical-align: middle;
+  }
 }
 </style>
